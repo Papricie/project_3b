@@ -23,9 +23,27 @@ import sys
 import time                     
 # Knihovna time – tu použijeme na zpomalení programu (pauza mezi stahováním).
 
+#------------------------------------------------------------------------------
+
 # Základní adresa volebního webu. 
 # Budeme ji používat, abychom spojili částečné odkazy na obce
 BASE_URL = "https://www.volby.cz/pls/ps2017nss/"
+
+#------------------------------------------------------------------------------
+
+def get_soup(url):
+    """Stáhne stránku z internetu a převede ji do formátu, 
+    se kterým se dobře pracuje."""
+    resp = requests.get(url)          
+    # Pošleme požadavek na web a stáhneme obsah stránky.
+    resp.encoding = "utf-8"           
+    # Nastavíme kódování na UTF-8 (aby se zobrazovala správně čeština).
+    return BeautifulSoup(resp.text, "html.parser")  
+    # Vrátíme HTML převedené do objektu, kde můžeme snadno hledat.
+
+#------------------------------------------------------------------------------
+
+
 
 
 
