@@ -1,7 +1,4 @@
 
-#------------------------------------------------------------------------------
-
-# HLAVIČKA PROJEKTU
 """
 Třetí projekt do Engeto Online Python Akademie
 autor: Patricie Hermanová
@@ -10,100 +7,73 @@ email: patriciehermanova@gmail.com
 
 #------------------------------------------------------------------------------
 
-import requests                 
-# Načteme knihovnu requests – ta umí stáhnout webovou stránku z internetu.
-from bs4 import BeautifulSoup   
-# Načteme BeautifulSoup – to je nástroj na čtení a vyhledávání v HTML kódu.
-import csv                      
-# Načteme knihovnu csv – ta se používá na zapisování dat do CSV souborů.
-from urllib.parse import urljoin, urlparse, parse_qs  
-# Načteme funkce pro práci s odkazy (URL).
-import sys                      
-# Knihovna sys – díky ní můžeme číst, co uživatel zadal při spuštění programu.
-import time                     
-# Knihovna time – tu použijeme na zpomalení programu (pauza mezi stahováním).
+import requests # stáhnutí webové stránky
+from bs4 import BeautifulSoup # čtení a vyhledávání v HTML
+import csv # zápis dat do CSV
+from urllib.parse import urljoin, urlparse, parse_qs # práce s odkazy
+import sys # vložené argumenty při spuštění programu
+import time # pauza mezi stahováním
 
 #------------------------------------------------------------------------------
 
-# Základní adresa volebního webu. 
-# Budeme ji používat, abychom spojili částečné odkazy na obce
 BASE_URL = "https://www.volby.cz/pls/ps2017nss/"
+# základní adresa volebního webu, spojení částečných odkazů na obce
 
 #------------------------------------------------------------------------------
 
 def get_soup(url):
     """Stáhne stránku z internetu a převede ji do formátu, 
     se kterým se dobře pracuje."""
-    resp = requests.get(url)          
-    # Pošleme požadavek na web a stáhneme obsah stránky.
-    resp.encoding = "utf-8"           
-    # Nastavíme kódování na UTF-8 (aby se zobrazovala správně čeština).
-    return BeautifulSoup(resp.text, "html.parser")  
-    # Vrátíme HTML převedené do objektu, kde můžeme snadno hledat.
+    resp = requests.get(url) # pošle požadavek na web a stáhne obsah stránky
+    resp.encoding = "utf-8" # kódování na UTF-8 (zobrazení češtiny)
+    return BeautifulSoup(resp.text, "html.parser") # HTML převedené na objekt
 
 #------------------------------------------------------------------------------
 
 def parse_obec(url, nazev_obce):
     """Zpracuje jednu obec – stáhne stránku a vybere z ní data 
     o voličích, obálkách a stranách."""
-    soup = get_soup(url)  
-    # Stáhneme HTML stránku s výsledky pro tuto konkrétní obec.
+    soup = get_soup(url) # HTML stránka s výsledky pro konkrétní obec
 
-    # Z odkazu na stránku obce zjistíme kód (číslo v parametru ?xobec=...)
     kod_obce = parse_qs(urlparse(url).query).get("xobec", ["N/A"])[0]
-    # Použijeme funkce z knihovny urllib.parse.
-    # Pokud by kód obce v URL chyběl, použijeme "N/A".
+    # z odkazu zjistí kód, pokud chybí, vypíše "N/A"
 
     def safe_find(headers):
         """Pomocná funkce: bezpečně najde obsah buňky <td> podle toho, 
         co má napsáno v "headers". Pokud se buňka nenajde, 
         vrátí prázdný text místo chyby."""
-        td = soup.find("td", {"headers": headers})  
-        # Najde první buňku <td> s daným atributem headers.
-        return td.text.strip() if td else ""        
-        # Pokud existuje, vrátí text uvnitř. Pokud ne, vrátí "".
+        td = soup.find("td", {"headers": headers}) # najde buňku <td> headers
+        return td.text.strip() if td else "" # pokud existuje, vrátí text
     
-    # Teď pomocí safe_find najdeme základní údaje o voličích:
-    volici = safe_find("sa2")   # Celkový počet voličů v seznamu.
-    obalky = safe_find("sa3")   # Kolik bylo vydaných obálek.
-    platne = safe_find("sa6")   # Kolik bylo platných hlasů.
+    volici = safe_find("sa2")  
+    obalky = safe_find("sa3")   
+    platne = safe_find("sa6")
+    # najde základní údaje o voličích   
 
-    # Najdeme všechny názvy politických stran v této obci.
-    # Jsou v buňkách tabulky <td> s class="overflow_name".
     strany = [td.text.strip() for td in soup.find_all
               ("td", class_="overflow_name")]
+    # najde názvy stran v buňkách tabulky <td> s class="overflow_name"
 
-    # Najdeme všechny počty hlasů pro strany.
-    hlasy = []                         
-    # Sem uložíme čísla (počty hlasů).
-    for td in soup.find_all("td"):     
-        # Projdeme všechny buňky tabulky <td>.
-        headers = td.get("headers", "")  
-        # Zjistíme, co je napsáno v "headers".
-        if isinstance(headers, list):    
-        # Někdy je to seznam → převedeme na text.
+    hlasy = [] # uloží počty hlasů
+    for td in soup.find_all("td"): # projde buňky tabulky <td>
+        headers = td.get("headers", "") # zjistí, co je napsáno v "headers"
+        if isinstance(headers, list): # seznam → převedeme na text
             headers = " ".join(headers)
-        if headers.endswith("sb3"):      
-        # Hledáme jen ty buňky, které mají v názvu sb3 (sloupec s hlasy).
-            hlasy.append(td.text.strip())  
-            # Přidáme počet hlasů do seznamu.
+        if headers.endswith("sb3"): # hledá buňky, které mají v názvu sb3
+            hlasy.append(td.text.strip()) # přidá počet hlasů do seznamu
 
-    # Vytvoříme slovník (tabulku v paměti), kam uložíme výsledky pro obec.
     data = {
-        "Kód obce": kod_obce,          # Číselný kód obce.
-        "Název obce": nazev_obce,      # Název obce (z okresní stránky).
-        "Voliči v seznamu": volici,    # Počet voličů.
-        "Vydané obálky": obalky,       # Počet vydaných obálek.
-        "Platné hlasy": platne,        # Počet platných hlasů.
-    }
+        "Kód obce": kod_obce,          
+        "Název obce": nazev_obce,      
+        "Voliči v seznamu": volici,    
+        "Vydané obálky": obalky,       
+        "Platné hlasy": platne,        
+    } # vytvoří slovník s výsledky pro obec
 
-    # Teď přidáme všechny strany a jejich počty hlasů.
-    # Přiřazujeme podle pořadí – první strana má první číslo, 
-    # druhá strana druhé číslo atd.
-    for s, h in zip(strany, hlasy):
+    for s, h in zip(strany, hlasy): # přidá všechny strany a počty hlasů
         data[s] = h
 
-    return data  # Vrátíme slovník se všemi výsledky pro tuto jednu obec.
+    return data  # vrátí slovník se všemi výsledky pro tuto obec
 
 #------------------------------------------------------------------------------
 
@@ -111,55 +81,38 @@ def main():
     """Hlavní funkce – stará se o celý postup: zpracování okresu 
     a zápis výsledků do souboru."""
 
-    # Nejprve zkontrolujeme, jestli uživatel zadal přesně dva argumenty.
-    if len(sys.argv) != 3:
-        print("Použití: python main.py <URL_OKRESU> <vystup.csv>")  
-        # Nápověda pro uživatele.
-        sys.exit(1)  
-        # Ukončí program.
+    if len(sys.argv) != 3: # zkontroluje přesně dva argumenty
+        print("Použití: python main.py <URL_OKRESU> <vystup.csv>") # nápověda
+        sys.exit(1) # ukončí program
 
-    url_okres = sys.argv[1]  
-    # První argument = adresa okresu (odkaz na stránku).
-    vystup = sys.argv[2]     
-    # Druhý argument = název výstupního CSV souboru.
+    url_okres = sys.argv[1] # 1. argument = adresa okresu (odkaz na stránku)
+    vystup = sys.argv[2] # 2. argument = název výstupního CSV souboru
 
-    soup = get_soup(url_okres)             
-    # Stáhneme stránku okresu.
-    tabulky = soup.find_all("table", class_="table")  
-    # Najdeme všechny tabulky se seznamem obcí.
+    soup = get_soup(url_okres) # stáhne stránku okresu
+    tabulky = soup.find_all("table", class_="table") # najde tabulky s obcemi
 
-    obec_links = []  # Tady budeme mít seznam (odkaz, název obce).
-    for tabulka in tabulky:                    
-        # Projdeme každou tabulku.
-        for tr in tabulka.find_all("tr"):      
-            # Projdeme každý řádek v tabulce.
-            cislo_td = tr.find("td", class_="cislo")          
-            # Najdeme buňku s číslem obce.
-            nazev_td = tr.find("td", class_="overflow_name")  
-            # Najdeme buňku s názvem obce.
-            if cislo_td and nazev_td:          
-                # Pokud obě buňky existují:
-                a = cislo_td.find("a", href=True)  
-                # Najdeme odkaz uvnitř čísla obce.
-                if a and "xobec=" in a["href"]:    
-                    # Pokud je to skutečně odkaz na obec:
-                    url = urljoin(BASE_URL, a["href"])  
-                    # Spojíme základní URL a relativní odkaz.
-                    nazev_obce = nazev_td.text.strip()  
-                    # Název obce (text uvnitř buňky).
-                    obec_links.append((url, nazev_obce))  
-                    # Přidáme dvojici (odkaz, název).
+    obec_links = []  # tady bude seznam (odkaz, název obce)
+    for tabulka in tabulky: # projde každou tabulku
+        for tr in tabulka.find_all("tr"): # projde každý řádek
+            cislo_td = tr.find("td", class_="cislo") # najde kód obce
+            nazev_td = tr.find("td", class_="overflow_name") # najde název obce
+            if cislo_td and nazev_td: # pokud obě buňky existují:
+                a = cislo_td.find("a", href=True) # najde url uvnitř kódu obce
+                if a and "xobec=" in a["href"]: # pokud je to url obce
+                    url = urljoin(BASE_URL, a["href"]) # spojí se základním URL
+                    nazev_obce = nazev_td.text.strip() # název (text buňky)
+                    obec_links.append((url, nazev_obce)) # dvojice odkaz+název
 
-    # Odstraníme duplicity (pokud by se nějak objevily).
+    # Odstraní duplicity (pokud by se nějak objevily).
     obec_links = list(dict.fromkeys(obec_links))
     print(f"Nalezeno obcí: {len(obec_links)}")  
-    # Vypíšeme, kolik obcí jsme našli.
+    # Vypisuje, kolik obcí je nalezeno.
 
     data_rows = []  # Tady bude seznam se slovníky (každá obec = jeden slovník).
-    for idx, (url, nazev_obce) in enumerate(obec_links[:3], 1):  
-        # [:3] znamená: vem jen první 3 obce na test.
+    for idx, (url, nazev_obce) in enumerate(obec_links[:2], 1):  
+        # [:2] znamená: vem jen první 2 obce na test.
         print(f"Zpracovávám obec {idx}/{len(obec_links)}... {nazev_obce}")  
-        # Vypíšeme průběh.
+        # Vypisuje průběh.
         obec_data = parse_obec(url, nazev_obce)  # Získáme data pro obec.
         data_rows.append(obec_data)              # Přidáme je do seznamu.
         time.sleep(1)  # Uděláme 1 vteřinu pauzu (abychom nezatížili server).
@@ -194,7 +147,7 @@ if __name__ == "__main__":
 
 #------------------------------------------------------------------------------   
 
-# python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv
+"""python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv"""
 # uvozovky jsou nutné, protože URL obsahuje znaky & a =
 
 #------------------------------------------------------------------------------  
