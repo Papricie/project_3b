@@ -45,10 +45,9 @@ def parse_obec(url, nazev_obce):
         td = soup.find("td", {"headers": headers}) # najde buňku <td> headers
         return td.text.strip() if td else "" # pokud existuje, vrátí text
     
-    volici = safe_find("sa2")  
-    obalky = safe_find("sa3")   
-    platne = safe_find("sa6")
-    # najde základní údaje o voličích   
+    volici = safe_find("sa2") # najde údaje
+    obalky = safe_find("sa3") # najde údaje  
+    platne = safe_find("sa6") # najde údaje 
 
     strany = [td.text.strip() for td in soup.find_all
               ("td", class_="overflow_name")]
@@ -103,47 +102,35 @@ def main():
                     nazev_obce = nazev_td.text.strip() # název (text buňky)
                     obec_links.append((url, nazev_obce)) # dvojice odkaz+název
 
-    # Odstraní duplicity (pokud by se nějak objevily).
-    obec_links = list(dict.fromkeys(obec_links))
-    print(f"Nalezeno obcí: {len(obec_links)}")  
-    # Vypisuje, kolik obcí je nalezeno.
+    obec_links = list(dict.fromkeys(obec_links)) # odstraní duplicity
+    print(f"Nalezeno obcí: {len(obec_links)}") # vypisuje průběh
 
-    data_rows = []  # Tady bude seznam se slovníky (každá obec = jeden slovník).
-    for idx, (url, nazev_obce) in enumerate(obec_links[:2], 1):  
-        # [:2] znamená: vem jen první 2 obce na test.
+    data_rows = []  # seznam se slovníky (každá obec = jeden slovník)
+    for idx, (url, nazev_obce) in enumerate(obec_links[:2], 1): # [:2] TEST
         print(f"Zpracovávám obec {idx}/{len(obec_links)}... {nazev_obce}")  
-        # Vypisuje průběh.
-        obec_data = parse_obec(url, nazev_obce)  # Získáme data pro obec.
-        data_rows.append(obec_data)              # Přidáme je do seznamu.
-        time.sleep(1)  # Uděláme 1 vteřinu pauzu (abychom nezatížili server).
+        obec_data = parse_obec(url, nazev_obce)  # získá data obce
+        data_rows.append(obec_data) # přidá je do seznamu
+        time.sleep(1) # 1 vteřina pauzu (brání přetížení serveru)
 
-    # Teď zjistíme, jaké všechny sloupce (klíče) potřebujeme do CSV.
-    all_keys = set()  # množina všech klíčů (názvy sloupců).
-    for row in data_rows:         # projdeme všechny obce
-        all_keys.update(row.keys())  # přidáme názvy sloupců
+    all_keys = set() # názvy sloupců (klíče) do CSV
+    for row in data_rows: # projde všechny obce
+        all_keys.update(row.keys()) # přidá názvy sloupců
 
-    # Hlavička CSV souboru – nejprve základní údaje, pak názvy všech stran.
     hlavicka = ["Kód obce", "Název obce", "Voliči v seznamu", "Vydané obálky", 
                 "Platné hlasy"] + \
         [k for k in all_keys if k not in 
          ("Kód obce", "Název obce", "Voliči v seznamu", "Vydané obálky", 
-          "Platné hlasy")]
+          "Platné hlasy")] # hlavička CSV, základní údaje + strany
     
-    # Teď vytvoříme a zapíšeme CSV soubor.
-    with open(vystup, "w", newline="", encoding="utf-8") as f:  
-        # Otevřeme soubor pro zápis.
-        zapisovac = csv.DictWriter(f, fieldnames=hlavicka)  
-        # Připravíme zapisovač pro slovníky.
-        zapisovac.writeheader()     
-        # Zapíšeme první řádek – hlavičku tabulky.
-        zapisovac.writerows(data_rows)  
-        # Zapíšeme všechny obce.
+    with open(vystup, "w", newline="", encoding="utf-8") as f: # otevře CSV
+        zapisovac = csv.DictWriter(f, fieldnames=hlavicka) # připraví slovníky
+        zapisovac.writeheader() # první řádek – hlavička
+        zapisovac.writerows(data_rows) # zapíše všechny data
 
-        print(f"Hotovo! Data uložená do {vystup}")  
-        # Potvrdíme, že program skončil a soubor je hotový.
+        print(f"Hotovo! Data uložená do {vystup}") # potvrzení
 
 if __name__ == "__main__":
-    main()  # Tohle spustí funkci main() – takže program začne běžet.
+    main()  # spustí funkci main()
 
 #------------------------------------------------------------------------------   
 
