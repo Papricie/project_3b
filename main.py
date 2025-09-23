@@ -54,10 +54,10 @@ def parse_obec(url, nazev_obce):
     # Použijeme funkce z knihovny urllib.parse.
     # Pokud by kód obce v URL chyběl, použijeme "N/A".
 
-    # Pomocná funkce: bezpečně najde obsah buňky <td> podle toho, 
-    # co má napsáno v "headers".
-    # Pokud se buňka nenajde, vrátí prázdný text místo chyby.
     def safe_find(headers):
+        """Pomocná funkce: bezpečně najde obsah buňky <td> podle toho, 
+        co má napsáno v "headers". Pokud se buňka nenajde, 
+        vrátí prázdný text místo chyby."""
         td = soup.find("td", {"headers": headers})  
         # Najde první buňku <td> s daným atributem headers.
         return td.text.strip() if td else ""        
@@ -86,7 +86,7 @@ def parse_obec(url, nazev_obce):
         if headers.endswith("sb3"):      
         # Hledáme jen ty buňky, které mají v názvu sb3 (sloupec s hlasy).
             hlasy.append(td.text.strip())  
-            # Přidáme číslo (počet hlasů) do seznamu.
+            # Přidáme počet hlasů do seznamu.
 
     # Vytvoříme slovník (tabulku v paměti), kam uložíme výsledky pro obec.
     data = {
