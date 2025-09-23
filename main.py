@@ -43,6 +43,17 @@ def get_soup(url):
 
 #------------------------------------------------------------------------------
 
+def parse_obec(url, nazev_obce):
+    """Zpracuje jednu obec – stáhne stránku a vybere z ní data 
+    o voličích, obálkách a stranách."""
+    soup = get_soup(url)  
+    # Stáhneme HTML stránku s výsledky pro tuto konkrétní obec.
+
+#------------------------------------------------------------------------------
+
+
+
+
 
 
 
