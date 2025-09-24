@@ -132,13 +132,6 @@ def main():
 if __name__ == "__main__":
     main()  # spustí funkci main()
 
-#------------------------------------------------------------------------------   
-
-# python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv
-# uvozovky jsou nutné, protože URL obsahuje znaky & a =
-
-# .\project_3b\Scripts\Activate.ps1
-
 
 
 
