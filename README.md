@@ -25,19 +25,31 @@ pip install -r requirements.txt
 
 V requirements.txt je zachyceno celé prostředí včetně verzí všech závislostí:
 
-*beautifulsoup4==4.13.5
-*certifi==2025.8.3
-*charset-normalizer==3.4.3
-*idna==3.10
-*numpy==2.3.2
-*python-dateutil==2.9.0.post0
-*pytz==2025.2
-*requests==2.32.5
-*six==1.17.0
-*soupsieve==2.8
-*typing_extensions==4.15.0
-*tzdata==2025.2
-*urllib3==2.5.0
+beautifulsoup4==4.13.5
+
+certifi==2025.8.3
+
+charset-normalizer==3.4.3
+
+idna==3.10
+
+numpy==2.3.2
+
+python-dateutil==2.9.0.post0
+
+pytz==2025.2
+
+requests==2.32.5
+
+six==1.17.0
+
+soupsieve==2.8
+
+typing_extensions==4.15.0
+
+tzdata==2025.2
+
+urllib3==2.5.0
 
 ### Použití
 **Skript se spouští pomocí příkazové řádky se dvěma argumenty:**
