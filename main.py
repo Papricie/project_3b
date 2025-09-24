@@ -131,6 +131,7 @@ def main():
 
 if __name__ == "__main__":
     main()  # spustí funkci main()
+    
 
 
 
