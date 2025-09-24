@@ -14,8 +14,8 @@ Naklonujte nebo stáhněte tento projekt do svého počítače.
 Doporučený postup je spustit projekt v samostatném virtuálním prostředí:
 
 python -m venv venv  
-source venv/bin/activate   # Linux / Mac  
-venv\Scripts\activate      # Windows  
+source venv/bin/activate    # Linux / Mac  
+venv\Scripts\activate    # Windows  
 
 ### 3. Instalace závislostí
 Projekt používá knihovny uvedené v requirements.txt.  
