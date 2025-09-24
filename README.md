@@ -49,7 +49,7 @@ urllib3==2.5.0
 
 2. Název výstupního souboru (CSV)
 
-*Příklad pro okres Benešov:*
+*Příklad pro okres Benešov:*  
 python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv
 
 ### Ukázkový průběh v terminálu
