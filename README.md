@@ -13,9 +13,9 @@ Naklonujte nebo stáhněte tento projekt do svého počítače.
 ### 2. Vytvoření a aktivace virtuálního prostředí v terminálu
 Doporučený postup je spustit projekt v samostatném virtuálním prostředí:
 
-python -m venv venv
-source venv/bin/activate   # Linux / Mac
-venv\Scripts\activate      # Windows
+python -m venv venv  
+source venv/bin/activate   # Linux / Mac  
+venv\Scripts\activate      # Windows  
 
 ### 3. Instalace závislostí
 Projekt používá knihovny uvedené v requirements.txt.  
