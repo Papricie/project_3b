@@ -13,8 +13,8 @@ Naklonujte nebo stáhněte tento projekt do svého počítače.
 ### 2. Vytvoření a aktivace virtuálního prostředí v terminálu
 Doporučený postup je spustit projekt v samostatném virtuálním prostředí:
 
-|python -m venv venv       |vytvoření      |
-|--------------------------|---------------|
+| python -m venv venv      | vytvoření     |
+|                          |               |
 |                          | spuštění      |
 | source venv/bin/activate | # Linux / Mac |
 | venv\Scripts\activate    | # Windows     |
