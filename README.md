@@ -19,7 +19,7 @@ venv\Scripts\activate      # Windows
 
 ### 3. Instalace závislostí
 Projekt používá knihovny uvedené v requirements.txt.  
-Nainstalujte je pomocí:
+*Nainstalujte je pomocí:*
 
 pip install -r requirements.txt
 
