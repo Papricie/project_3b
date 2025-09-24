@@ -50,18 +50,18 @@ urllib3==2.5.0
 python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv
 
 ### Ukázkový průběh v terminálu
-Nalezeno obcí: 114
-Zpracovávám obec 1/114... Benešov
-Zpracovávám obec 2/114... Bernartice
-Zpracovávám obec 3/114... Bílkovice
-Zpracovávám obec 4/114... Blažejovice
-...
-Hotovo! Data uložená do vysledky.csv
+Nalezeno obcí: 114  
+Zpracovávám obec 1/114... Benešov  
+Zpracovávám obec 2/114... Bernartice  
+Zpracovávám obec 3/114... Bílkovice  
+Zpracovávám obec 4/114... Blažejovice  
+...  
+Hotovo! Data uložená do vysledky.csv  
 
 
 ### Ukázkový výstup v CSV
-Pro okres Benešov skript stáhne data všech obcí a uloží je do CSV.
-*Soubor může vypadat takto:*
+Pro okres Benešov skript stáhne data všech obcí a uloží je do CSV.  
+*Soubor může vypadat takto:*  
 
 | Kód obce | Název obce | Voliči v seznamu | Vydané obálky | Platné hlasy | Občanská demokratická strana | Řád národa - Vlastenecká unie | CESTA ODPOVĚDNÉ SPOLEČNOSTI | ... |
 | -------- | ---------- | ---------------- | ------------- | ------------ | ---------------------------- | ----------------------------- | --------------------------- | --- |
