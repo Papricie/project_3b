@@ -17,6 +17,12 @@ python -m venv venv
 source venv/bin/activate    # Linux / Mac  
 venv\Scripts\activate    # Windows  
 
+| python -m venv venv                      |
+|--------------------------|---------------|
+| source venv/bin/activate | # Linux / Mac |
+| venv\Scripts\activate    | # Windows     |
+
+
 ### 3. Instalace závislostí
 Projekt používá knihovny uvedené v requirements.txt.  
 *Nainstalujte je pomocí:*
