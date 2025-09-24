@@ -1,7 +1,6 @@
-# Projekt_03 Engeto Academy:   
-# Analýza výsledků voleb do Poslanecké sněmovny 2017
+# Projekt_03 Engeto Academy: Analýza výsledků voleb do Poslanecké sněmovny 2017
 
-Tento projekt slouží k **automatickému stažení a zpracování výsledků voleb do Poslanecké sněmovny 2017** z webu https://www.volby.cz/pls/ps2017nss/ps3?xjazyk=CZ
+Tento projekt slouží k **automatickému stažení a zpracování výsledků voleb do Poslanecké sněmovny 2017** z webu https://www.volby.cz/pls/ps2017nss/ps3?xjazyk=CZ  
 Skript stáhne data zadaného okresu, projde všechny obce v daném okrese a uloží výsledky do CSV souboru.
 
 ---
@@ -19,7 +18,7 @@ source venv/bin/activate   # Linux / Mac
 venv\Scripts\activate      # Windows
 
 ### 3. Instalace závislostí
-Projekt používá knihovny uvedené v requirements.txt.
+Projekt používá knihovny uvedené v requirements.txt.  
 Nainstalujte je pomocí:
 
 pip install -r requirements.txt
