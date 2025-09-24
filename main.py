@@ -32,7 +32,7 @@ def get_soup(url):
 
 def parse_obec(url, nazev_obce):
     """Zpracuje jednu obec – stáhne stránku a vybere z ní data 
-    o voličích, obálkách a stranách."""
+    o voličích a stranách."""
     soup = get_soup(url) # HTML stránka s výsledky pro konkrétní obec
 
     kod_obce = parse_qs(urlparse(url).query).get("xobec", ["N/A"])[0]
@@ -106,8 +106,8 @@ def main():
     print(f"Nalezeno obcí: {len(obec_links)}") # vypisuje průběh
 
     data_rows = []  # seznam se slovníky (každá obec = jeden slovník)
-    for idx, (url, nazev_obce) in enumerate(obec_links[:2], 1): # [:2] TEST
-        print(f"Zpracovávám obec {idx}/{len(obec_links)}... {nazev_obce}")  
+    for idx, (url, nazev_obce) in enumerate(obec_links, 1): # projde obce
+        print(f"Zpracovávám obec {idx}/{len(obec_links)}... {nazev_obce}") # běh
         obec_data = parse_obec(url, nazev_obce)  # získá data obce
         data_rows.append(obec_data) # přidá je do seznamu
         time.sleep(1) # 1 vteřina pauzu (brání přetížení serveru)
@@ -134,17 +134,10 @@ if __name__ == "__main__":
 
 #------------------------------------------------------------------------------   
 
-"""python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv"""
+# python main.py "https://www.volby.cz/pls/ps2017nss/ps32?xjazyk=CZ&xkraj=2&xnumnuts=2101" vysledky.csv
 # uvozovky jsou nutné, protože URL obsahuje znaky & a =
 
-#------------------------------------------------------------------------------  
-
-
-
-
-
-    
-
+# .\project_3b\Scripts\Activate.ps1
 
 
 
