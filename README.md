@@ -1,4 +1,5 @@
-# Projekt_03 Engeto Academy: Analýza výsledků voleb do Poslanecké sněmovny 2017
+# Projekt_03 Engeto Academy:   
+# Analýza výsledků voleb do Poslanecké sněmovny 2017
 
 Tento projekt slouží k **automatickému stažení a zpracování výsledků voleb do Poslanecké sněmovny 2017** z webu https://www.volby.cz/pls/ps2017nss/ps3?xjazyk=CZ
 Skript stáhne data zadaného okresu, projde všechny obce v daném okrese a uloží výsledky do CSV souboru.
